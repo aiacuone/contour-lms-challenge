@@ -2,7 +2,7 @@
 
 A mini learning management system for booking and managing consultations, built with Next.js and Supabase.
 
-The setup steps, implementation summary, assumptions and next steps are added as the build progresses. Key design decisions are recorded as ADRs in [docs/adr](docs/adr/README.md).
+The setup steps, implementation summary, assumptions and next steps are added as the build progresses. Key design decisions are recorded as ADRs in [docs/adr](docs/adr/README.md). Low-detail [wireframes](docs/wireframes/index.html) of the screens are in `docs/wireframes`.
 
 ## Technical choices
 

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin list</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:5px 10px;border:1px solid #444;background:#fff;color:#222;font-size:12px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;border:1px solid #666;background:#eee;color:#222}
+.badge.done{background:#d9d9d9}
+.badge.cancelled{background:#fff;border-style:dashed;color:#555}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #ccc;font-size:14px}
+th{font-size:12px;text-transform:uppercase;color:#555}
+a{color:#333}
+</style>
+<div style="width: 1000px; height: 620px; box-sizing: border-box; background: #fafafa; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 16px 32px; border-bottom: 1px solid #bbb; background: #fff">
+<strong style="flex-grow: 1">Consultations</strong>
+<a href="dashboard.html" style="font-size: 14px">My consultations</a>
+<span style="font-size: 14px; font-weight: 600">All consultations</span>
+<span style="font-size: 13px; color: #555">admin@example.com</span>
+<button class="btn">Log out</button>
+</div>
+<div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 24px">All consultations</h1>
+<div style="background: #fff; border: 1px solid #bbb; border-radius: 8px">
+<table>
+<thead><tr><th>Student</th><th>Date and time</th><th>Reason</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Mia Nguyen<br><span style="font-size: 12px; color: #555">student@example.com</span></td><td>Mon 30 Nov, 3:00 pm</td><td>Study plan for exam season</td><td><span class="badge">Booked</span></td></tr>
+<tr><td>Mia Nguyen<br><span style="font-size: 12px; color: #555">student@example.com</span></td><td>Fri 27 Nov, 11:00 am</td><td>Subject selection</td><td><span class="badge cancelled">Cancelled</span></td></tr>
+<tr><td>Sam Patel<br><span style="font-size: 12px; color: #555">sam@example.com</span></td><td>Tue 24 Nov, 2:00 pm</td><td>Chemistry revision</td><td><span class="badge done">Completed</span></td></tr>
+<tr><td>Sam Patel<br><span style="font-size: 12px; color: #555">sam@example.com</span></td><td>Wed 2 Dec, 9:30 am</td><td>UCAT preparation</td><td><span class="badge">Booked</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="note">GET /api/admin/consultations: admin only (401 if logged out, 403 if not an admin). Read-only: no actions. Shows every student's consultations, cancelled ones included, newest first. The "All consultations" link only appears for admins. The role comes from user_roles via is_admin().</div>
+</div>
+</div>
+</body>
+</html>

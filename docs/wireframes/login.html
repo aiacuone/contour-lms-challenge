@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Log in</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:10px 16px;border:1px solid #444;background:#fff;color:#222;font-size:14px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.primary{background:#333;color:#fff}
+.field label{display:block;font-size:13px;margin-bottom:4px;color:#444}
+.field input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #888;border-radius:6px;font:inherit;background:#fff}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+a{color:#333}
+</style>
+<div style="width: 480px; height: 520px; box-sizing: border-box; padding: 40px; background: #fafafa; display: flex; flex-direction: column; gap: 20px">
+<div style="font-size: 13px; color: #555; letter-spacing: 0.08em; text-transform: uppercase">Consultations</div>
+<h1 style="margin: 0; font-size: 26px">Log in</h1>
+<div style="background: #fff; border: 1px solid #bbb; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div class="field"><label for="email">Email</label><input id="email" type="email" value="student@example.com"></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" value="password"></div>
+<a class="btn primary" href="dashboard.html" style="text-align: center">Log in</a>
+<div style="font-size: 14px">No account? <a href="signup.html">Sign up</a></div>
+</div>
+<div class="note">Calls Supabase sign-in (template auth). Wrong password: inline error under the form. Success goes to the dashboard; an admin sees an extra "Admin" link in the header.</div>
+</div>
+</body>
+</html>

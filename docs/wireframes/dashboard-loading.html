@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard: loading</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:8px 14px;border:1px solid #444;background:#fff;color:#222;font-size:13px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.primary{background:#333;color:#fff}
+.btn.small{padding:5px 10px;font-size:12px}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+.sk{height:14px;border-radius:4px;background:#ddd}
+.row{display:grid;grid-template-columns:2fr 3fr 1fr 2fr;gap:16px;padding:16px 12px;border-bottom:1px solid #ccc;align-items:center}
+</style>
+<div style="width: 1000px; height: 520px; box-sizing: border-box; background: #fafafa; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 16px 32px; border-bottom: 1px solid #bbb; background: #fff">
+<strong style="flex-grow: 1">Consultations</strong>
+<span style="font-size: 13px; color: #555">student@example.com</span>
+<button class="btn small">Log out</button>
+</div>
+<div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center">
+<h1 style="margin: 0; font-size: 24px; flex-grow: 1">My consultations</h1>
+<button class="btn primary">Book consultation</button>
+</div>
+<div style="background: #fff; border: 1px solid #bbb; border-radius: 8px" aria-busy="true">
+<div class="row"><div class="sk"></div><div class="sk"></div><div class="sk" style="width: 60%"></div><div class="sk"></div></div>
+<div class="row"><div class="sk"></div><div class="sk"></div><div class="sk" style="width: 60%"></div><div class="sk"></div></div>
+<div class="row"><div class="sk"></div><div class="sk"></div><div class="sk" style="width: 60%"></div><div class="sk"></div></div>
+</div>
+<div class="note">Shown while GET /api/consultations is in flight: three skeleton rows. On a 401 the app redirects to Log in. On a network error, an inline "Couldn't load consultations. Try again" message with a retry button replaces the rows.</div>
+</div>
+</div>
+</body>
+</html>

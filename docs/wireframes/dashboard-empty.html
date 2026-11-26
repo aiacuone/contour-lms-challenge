@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard: empty</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:8px 14px;border:1px solid #444;background:#fff;color:#222;font-size:13px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.primary{background:#333;color:#fff}
+.btn.small{padding:5px 10px;font-size:12px}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+</style>
+<div style="width: 1000px; height: 520px; box-sizing: border-box; background: #fafafa; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 16px 32px; border-bottom: 1px solid #bbb; background: #fff">
+<strong style="flex-grow: 1">Consultations</strong>
+<span style="font-size: 13px; color: #555">new.student@example.com</span>
+<button class="btn small">Log out</button>
+</div>
+<div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center">
+<h1 style="margin: 0; font-size: 24px; flex-grow: 1">My consultations</h1>
+<button class="btn primary">Book consultation</button>
+</div>
+<div style="background: #fff; border: 1px dashed #888; border-radius: 8px; padding: 56px 24px; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center">
+<div style="font-size: 18px">No consultations yet</div>
+<div style="font-size: 14px; color: #555">Book your first consultation and it will show up here.</div>
+<button class="btn primary">Book consultation</button>
+</div>
+<div class="note">A new student: GET /api/consultations returns an empty list (200). The empty state replaces the table.</div>
+</div>
+</div>
+</body>
+</html>

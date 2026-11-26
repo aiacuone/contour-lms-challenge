@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reschedule consultation</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:10px 16px;border:1px solid #444;background:#fff;color:#222;font-size:14px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.primary{background:#333;color:#fff}
+.field label{display:block;font-size:13px;margin-bottom:4px;color:#444}
+.field input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #888;border-radius:6px;font:inherit;background:#fff}
+.alert{border:2px solid #9a1c1c;color:#9a1c1c;background:#fff;border-radius:6px;padding:10px 12px;font-size:14px}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+</style>
+<div style="width: 560px; height: 600px; box-sizing: border-box; padding: 24px; background: #9a9a9a; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #fff; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h1 style="margin: 0; font-size: 20px">Reschedule consultation</h1>
+<div style="font-size: 14px; color: #444">Essay feedback, currently Thu 3 Dec, 4:30 pm</div>
+<div class="alert" role="alert">Cancelled consultations can't be rescheduled. (409)</div>
+<div class="field"><label for="newwhen">New date and time</label><input id="newwhen" type="datetime-local" value="2026-12-05T10:00"></div>
+<div style="display: flex; justify-content: flex-end; gap: 8px">
+<a class="btn" href="dashboard.html">Close</a>
+<button class="btn primary">Reschedule</button>
+</div>
+</div>
+<div class="note">POST /api/consultations/[id]/reschedule with { scheduledAt }. Owner only, booked only, future time only. The red message above shows the 409 case (it can only happen if the page is stale, because Reschedule is hidden on cancelled rows). A 400 shows a past time inline. 404 if the consultation isn't the student's.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Student dashboard</title>
+</head>
+<body style="background:#e8e8e8">
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+.btn{display:inline-block;padding:8px 14px;border:1px solid #444;background:#fff;color:#222;font-size:13px;border-radius:6px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.primary{background:#333;color:#fff}
+.btn.small{padding:5px 10px;font-size:12px}
+.note{font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#444;background:#f1f1f1;border:1px dashed #888;border-radius:4px;padding:6px 8px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;border:1px solid #666;background:#eee;color:#222}
+.badge.done{background:#d9d9d9}
+.badge.cancelled{background:#fff;border-style:dashed;color:#555}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #ccc;font-size:14px;vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;color:#555}
+a{color:#333}
+</style>
+<div style="width: 1000px; height: 680px; box-sizing: border-box; background: #fafafa; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 16px 32px; border-bottom: 1px solid #bbb; background: #fff">
+<strong style="flex-grow: 1">Consultations</strong>
+<span style="font-size: 13px; color: #555">student@example.com</span>
+<a class="btn small" href="login.html">Log out</a>
+</div>
+<div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center">
+<h1 style="margin: 0; font-size: 24px; flex-grow: 1">My consultations</h1>
+<a class="btn primary" href="book.html">Book consultation</a>
+</div>
+<div style="background: #fff; border: 1px solid #bbb; border-radius: 8px">
+<table>
+<thead><tr><th>Date and time</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody>
+<tr><td>Mon 30 Nov, 3:00 pm</td><td>Study plan for exam season</td><td><span class="badge">Booked</span></td><td><span style="display: flex; gap: 8px"><button class="btn small">Reschedule</button><button class="btn small">Cancel</button><button class="btn small">Mark complete</button></span></td></tr>
+<tr><td>Thu 3 Dec, 4:30 pm</td><td>Essay feedback</td><td><span class="badge">Booked</span></td><td><span style="display: flex; gap: 8px"><button class="btn small">Reschedule</button><button class="btn small">Cancel</button><button class="btn small">Mark complete</button></span></td></tr>
+<tr><td>Tue 24 Nov, 2:00 pm</td><td>Chemistry revision</td><td><span class="badge done">Completed</span></td><td><button class="btn small">Mark incomplete</button></td></tr>
+<tr><td>Fri 27 Nov, 11:00 am</td><td>Subject selection</td><td><span class="badge cancelled">Cancelled</span></td><td style="color: #666; font-size: 13px">No actions (cancelled is final)</td></tr>
+</tbody>
+</table>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div class="note">GET /api/consultations: only this student's rows (RLS). Sorted by date and time.</div>
+<div class="note">Book consultation: opens the booking dialog. POST /api/consultations.</div>
+<div class="note">Reschedule, Cancel: POST /api/consultations/[id]/reschedule and /cancel. Booked only. Past times rejected.</div>
+<div class="note">Mark complete or incomplete: POST /api/consultations/[id]/complete with { completed }. Not when cancelled.</div>
+</div>
+</div>
+</div>
+</body>
+</html>
