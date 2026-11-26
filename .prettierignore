@@ -7,3 +7,5 @@ docs/wireframes
 next-env.d.ts
 docs
 README.md
+supabase/config.jsonc
+supabase/.temp
