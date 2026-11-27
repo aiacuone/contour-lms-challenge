@@ -44,6 +44,19 @@ npm run promote -- someone@example.com
 
 CI runs all of these on every push, plus a secret scan.
 
+### A quick review
+
+1. As student@example.com, book, reschedule, mark complete and cancel a consultation.
+2. As sam@example.com, check that none of the first student's consultations show.
+3. As admin@example.com, open "All consultations" to see every student's, with emails.
+
+These should fail:
+
+- A student opening http://localhost:3000/admin/consultations sees "You don't have access".
+- Booking or rescheduling to a past time is refused.
+- A cancelled consultation has no actions, and the API answers 409 if one is forced (see `tests/routes.test.ts`).
+- `curl -i http://localhost:3000/api/consultations` while logged out answers 401.
+
 ## How it works
 
 ### Structure
