@@ -35,8 +35,9 @@ Schema changes are SQL migration files in `supabase/migrations`, applied in name
 
    ```
    npm run typecheck
+   npm test
    ```
 
-   Once the test suite exists, run `npm test` as well.
+   For a new policy, grant or rule, add tests for it first; see [testing.md](testing.md).
 
 7. Commit the migration and `lib/database.types.ts` together.

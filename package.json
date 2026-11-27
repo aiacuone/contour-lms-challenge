@@ -12,7 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "db:types": "supabase gen types typescript --local --schema public > lib/database.types.ts && prettier --write lib/database.types.ts",
     "promote": "node --env-file-if-exists=.env.local scripts/promote.mts",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run build",
+    "test": "vitest run"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
@@ -30,7 +31,7 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
-    "@types/node": "20.19.43",
+    "@types/node": "24.19.2",
     "@types/react": "19.3.3",
     "@types/react-dom": "19.3.0",
     "eslint": "9.39.5",
@@ -38,6 +39,7 @@
     "prettier": "3.10.1",
     "supabase": "3.4.0",
     "tailwindcss": "4.3.3",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
   }
 }
