@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type {
+  AdminConsultation,
   Consultation,
   ConsultationStatus,
 } from "@/lib/data/consultations";
@@ -56,4 +57,12 @@ export function toConsultationJson(row: Consultation): ConsultationJson {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+}
+
+export type AdminConsultationJson = ConsultationJson & { studentEmail: string };
+
+export function toAdminConsultationJson(
+  row: AdminConsultation,
+): AdminConsultationJson {
+  return { ...toConsultationJson(row), studentEmail: row.student_email };
 }

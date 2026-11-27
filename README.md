@@ -11,6 +11,7 @@ Smaller choices that do not need a full decision record.
 | Choice | Decision | Why |
 |---|---|---|
 | UI library | shadcn/ui (Base UI and Tailwind), with components copied into the repo | Readable component code in the repo, fewer custom UI lines to review, and works in server components. Alternatives were MUI, Mantine and Tailwind UI |
+| Admin list emails | An admin-only database function, `admin_consultations()`, joins each student's email into the admin list | Emails live in `auth.users`, which the API cannot read; the function checks `is_admin()` itself and returns no rows to anyone else |
 | Next.js version | Next.js 16, app router | Current, and matches the `proxy.ts` session refresh from [ADR 0001](docs/adr/0001-starting-point.md) |
 | TypeScript | Strict mode; typecheck runs separately from the build | Catches more mistakes early |
 | Package manager | npm | Nothing extra to install |

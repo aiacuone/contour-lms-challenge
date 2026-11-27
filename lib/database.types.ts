@@ -70,6 +70,21 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      admin_consultations: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          created_at: string;
+          first_name: string;
+          id: string;
+          last_name: string;
+          reason: string;
+          scheduled_at: string;
+          status: Database["public"]["Enums"]["consultation_status"];
+          student_email: string;
+          student_id: string;
+          updated_at: string;
+        }[];
+      };
       is_admin: { Args: Record<PropertyKey, never>; Returns: boolean };
     };
     Enums: {

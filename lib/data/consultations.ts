@@ -11,6 +11,8 @@ import type { DbClient } from "@/lib/supabase/server";
 export type Consultation = Database["public"]["Tables"]["consultations"]["Row"];
 export type ConsultationStatus =
   Database["public"]["Enums"]["consultation_status"];
+export type AdminConsultation =
+  Database["public"]["Functions"]["admin_consultations"]["Returns"][number];
 
 export type NewConsultation = {
   firstName: string;
@@ -62,14 +64,13 @@ export async function listMyConsultations(
   return data;
 }
 
-// Every consultation, newest first. RLS only returns them all to admins.
+// Every consultation with the student's email, newest first.
 export async function listAllConsultations(
   supabase: DbClient,
-): Promise<Consultation[]> {
-  const { data, error } = await supabase
-    .from("consultations")
-    .select(COLUMNS)
-    .order("scheduled_at", { ascending: false });
+): Promise<AdminConsultation[]> {
+  // admin_consultations() joins in each student's email and returns rows
+  // only to admins.
+  const { data, error } = await supabase.rpc("admin_consultations");
   if (error) throw toApiError(error);
   return data;
 }
