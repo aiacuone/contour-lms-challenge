@@ -136,7 +136,7 @@ export function ConsultationsPanel() {
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
         <h1 className="flex-1 text-2xl font-semibold">My consultations</h1>
         <Button onClick={openBook}>Book consultation</Button>
       </div>
@@ -257,7 +257,7 @@ function RowActions({
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex min-w-56 flex-wrap gap-2">
       <Button variant="outline" size="sm" onClick={onReschedule}>
         Reschedule
       </Button>
