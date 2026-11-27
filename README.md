@@ -1,8 +1,125 @@
 # contour-lms-challenge
 
-A mini learning management system for booking and managing consultations, built with Next.js and Supabase.
+A mini learning management system where students book and manage consultations and admins see every consultation, built with Next.js 16, TypeScript and Supabase.
 
-The setup steps, implementation summary, assumptions and next steps are added as the build progresses. Key design decisions are recorded as ADRs in [docs/adr](docs/adr/README.md). Low-detail [wireframes](docs/wireframes/index.html) of the screens are in `docs/wireframes`.
+Key design decisions are recorded as ADRs in [docs/adr](docs/adr/README.md). Low-detail [wireframes](docs/wireframes/index.html) of the screens are in `docs/wireframes`, and step-by-step guides are in [docs/how-to](docs/how-to).
+
+## Run it
+
+You need Node 24 (see `.nvmrc`) and Docker running, for the local Supabase stack.
+
+```sh
+npm ci && npm run setup
+npm run dev
+```
+
+Then open http://localhost:3000
+
+- `npm run setup` starts Supabase locally, which applies the migrations and seed data, and writes `.env.local` from it (see `.env.example`). It leaves an existing `.env.local` alone.
+- `npx supabase stop` stops the stack. `npx supabase db reset` restores the seed data.
+
+### Demo logins
+
+All seeded accounts use the password `password123` (local only).
+
+| Email | Role | Has |
+|---|---|---|
+| admin@example.com | Admin | The "All consultations" page |
+| student@example.com | Student | Four consultations: booked, completed and cancelled |
+| sam@example.com | Student | One consultation, so the admin list shows more than one student |
+
+Anyone who signs up is a student. To make an existing user an admin:
+
+```sh
+npm run promote -- someone@example.com
+```
+
+### Checks
+
+| Command | Runs |
+|---|---|
+| `npm run check` | Typecheck, lint, format check and production build |
+| `npm test` | Unit, integration and database tests (needs the local stack) |
+| `npm run e2e` | One browser test of the main path, with an accessibility check, against a production build on port 3101 |
+
+CI runs all of these on every push, plus a secret scan.
+
+## How it works
+
+### Structure
+
+| Path | Holds |
+|---|---|
+| `app/api` | The API routes; every read and write of consultations goes through them |
+| `app/dashboard`, `app/admin` | The student and admin pages, which call the API from the browser |
+| `lib/api` | Request schemas (zod), guards, the error handler, rate limiting |
+| `lib/data` | The data module: every query, run as the logged-in user |
+| `lib/rules` | The status and reschedule rules the routes check |
+| `supabase/migrations` | The schema, row-level security policies, rules trigger and admin function |
+| `supabase/seed.sql` | Demo users and consultations |
+| `tests`, `e2e` | Vitest tests and the Playwright test |
+
+### API
+
+| Route | Does | Who |
+|---|---|---|
+| `GET /api/consultations` | Lists my consultations, soonest first | Logged in |
+| `POST /api/consultations` | Books a consultation | Logged in |
+| `POST /api/consultations/[id]/reschedule` | Moves it to a new future time | Its owner |
+| `POST /api/consultations/[id]/cancel` | Cancels it; the row is kept | Its owner |
+| `POST /api/consultations/[id]/complete` | Marks it complete or incomplete (`{ completed }`) | Its owner |
+| `GET /api/admin/consultations` | Lists every consultation with the student's email, read-only | Admins |
+
+JSON is camelCase. Every error has one shape, `{ error: { code, message, details? } }`: 400 for invalid input (with field errors), 401 logged out, 403 not an admin, 404 not found or not yours, 409 a rule was broken, 429 too many requests. One wrapper turns every thrown error into that shape and logs it as structured JSON, with `LOG_LEVEL` setting the level. See [ADR 0006](docs/adr/0006-api-shape.md).
+
+### Roles and access
+
+- Roles live in a `user_roles` table that no user can write to. A user with no row is a student. ([ADR 0004](docs/adr/0004-role-storage.md))
+- One SQL function, `is_admin()`, is the role check everywhere: in the row-level security policies, and in the admin route.
+- Two layers ([ADR 0003](docs/adr/0003-access-control.md)):
+  - **API routes** check the session (401), the admin role on admin routes (403) and the input (400).
+  - **Row-level security** decides which rows a user can see or change: students only their own, admins can read all. Column grants limit what a user can write, so a student cannot change who owns a row or its timestamps. The database tests run without the routes, so they prove a route bug cannot leak another student's data.
+- RLS is used, rather than checks in code alone, because it still holds if a route is wrong or a query is reused somewhere new.
+
+### Consultation rules
+
+- A consultation is `booked`, `completed` or `cancelled` ([ADR 0007](docs/adr/0007-consultation-state.md)).
+- The rules are checked in the routes, for a clear 409, and again by a database trigger, so a bad change is blocked even if it skips the API ([ADR 0008](docs/adr/0008-cancel-and-reschedule-rules.md)).
+
+### Data access, and why there is no ORM
+
+Queries use supabase-js with the logged-in user's client, behind a typed data module (`lib/data`), with types generated from the schema ([ADR 0005](docs/adr/0005-data-access.md)). An ORM such as Prisma or Drizzle connects as a database role that bypasses row-level security, so every query would need its own access check in code. Running every query as the user keeps RLS in force.
+
+### Authentication
+
+- Log in, sign up and log out use Supabase Auth, wired from the `with-supabase` example's four auth files ([ADR 0001](docs/adr/0001-starting-point.md)). `proxy.ts` refreshes the session on every request and sends logged-out users to the login page.
+- The login, sign-up and logout forms call Supabase Auth straight from the browser, as the example does; that is the only place the app does not go through its own API, and the brief allows the example's auth flow. Everything else uses API routes, not Server Actions.
+
+### Security
+
+Server-side validation with zod on every route, row-level security, security headers, rate limiting, no secrets in the repo, and a secret scan in CI. Details are in the Technical choices table below.
+
+### Testing
+
+- **Database tests** run as each user against the real local database, proving the RLS policies and the rules trigger hold on their own.
+- **Route tests** call each route handler as each user: logged out, two students and an admin, across all six routes.
+- **Unit tests** cover the rate limiter. The rule functions are covered through the route tests.
+- **One end-to-end test** walks a student through booking, rescheduling, completing and cancelling, then checks the admin sees it, with an axe accessibility check (WCAG 2.1 AA) on each screen.
+
+See [docs/how-to/testing.md](docs/how-to/testing.md).
+
+## Assumptions
+
+- Anyone can sign up, and every new user is a student. Admins come from the seed file or `npm run promote` ([ADR 0009](docs/adr/0009-admin-creation.md)); there is no screen for managing roles.
+- A student books for themselves. The first and last name are entered on each booking, as the brief lists them, and are not taken from the account.
+- Consultations are not with a particular tutor, so there are no availability or double-booking checks.
+- Booking and rescheduling must be for a time in the future.
+- Only a booked consultation can be rescheduled or cancelled. Cancelled is final.
+- Marking complete or incomplete works on any consultation that is not cancelled, including future ones. Incomplete returns it to booked.
+- Cancelling keeps the row, so the history stays and the admin sees cancelled consultations too.
+- The admin view is read-only and lists everything, newest first, with each student's email. An admin's own "My consultations" page works like a student's.
+- Times are stored in UTC and shown in the browser's time zone.
+- Email confirmation is off in the local Supabase config, so a new sign-up can log in at once.
 
 ## Technical choices
 
@@ -31,4 +148,12 @@ Smaller choices that do not need a full decision record.
 
 ## Next steps
 
+With more time:
+
 - On a phone, show each consultation as a card instead of a sideways-scrolling table, so the status and actions are visible without scrolling.
+- Paginate and filter the admin list (by status, date or student) so it scales past a few hundred rows.
+- Move the rate limit to a shared store such as Redis, so it holds across several server instances.
+- Use a per-request CSP nonce to drop `'unsafe-inline'` for scripts.
+- Add a password reset and email confirmation flow for a hosted deployment.
+- Add an admin screen to grant and remove roles, with an audit log of who changed what.
+- Deploy to Vercel and a hosted Supabase project, with migrations applied from CI.
