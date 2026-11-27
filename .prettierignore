@@ -9,3 +9,5 @@ docs
 README.md
 supabase/config.jsonc
 supabase/.temp
+test-results
+playwright-report
