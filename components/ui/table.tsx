@@ -3,11 +3,20 @@
 import * as React from "react";
 import { cn } from "cn";
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+// `label` names the scroll area, which can be focused so keyboard users can
+// scroll a table that is wider than a phone screen.
+function Table({
+  className,
+  label,
+  ...props
+}: React.ComponentProps<"table"> & { label: string }) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      role="region"
+      aria-label={label}
+      tabIndex={0}
+      className="relative w-full overflow-x-auto rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
     >
       <table
         data-slot="table"

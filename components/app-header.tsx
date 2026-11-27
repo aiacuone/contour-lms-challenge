@@ -25,11 +25,15 @@ export async function AppHeader({ current }: { current: string }) {
 
   return (
     <header className="border-b">
-      <div className="mx-auto flex max-w-4xl items-center gap-6 px-6 py-3">
+      <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
         <span className="font-semibold">Consultations</span>
-        {/* Students have only their own page, so they get no nav. */}
+        {/* Students have only their own page, so they get no nav. On a phone
+            the nav moves to a second row. */}
         {isAdmin && (
-          <nav aria-label="Main" className="flex gap-4 text-sm">
+          <nav
+            aria-label="Main"
+            className="order-last flex basis-full gap-4 text-sm sm:order-none sm:basis-auto"
+          >
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -45,7 +49,9 @@ export async function AppHeader({ current }: { current: string }) {
             ))}
           </nav>
         )}
-        <span className="ml-auto text-sm text-muted-foreground">{email}</span>
+        <span className="ml-auto min-w-0 flex-1 truncate text-right text-sm text-muted-foreground sm:flex-none">
+          {email}
+        </span>
         <LogoutButton />
       </div>
     </header>

@@ -26,4 +26,9 @@ Smaller choices that do not need a full decision record.
 | Rate limiting | 60 API requests a minute per user (or IP when logged out), in memory, answering 429 | Slows a script hammering the API. The counts reset on restart and are not shared between servers; more than one instance would need a shared store such as Redis |
 | Secrets | `.env.example` with placeholders; `.env*` ignored; gitleaks scans the whole history in CI | Keys never reach the repo, and a mistake is caught on push |
 | CI | GitHub Actions on every push and pull request: lint and format, typecheck, secret scan, tests and end-to-end as separate jobs, with the local Supabase stack | Each failure names what broke. Superseded runs are cancelled, permissions are read-only, jobs have timeouts and actions are pinned to commit SHAs |
+| Phone layout | The header wraps the admin nav onto a second row; tables keep their columns and scroll sideways in a focusable, labelled region | Keeps one table component for every width. A card layout per row would read better on a phone but doubles the markup |
 | Quality baseline | ADRs, unit and integration tests, lint and format, typecheck, run instructions, README and seed data | Each is cheap and expected of a finished project |
+
+## Next steps
+
+- On a phone, show each consultation as a card instead of a sideways-scrolling table, so the status and actions are visible without scrolling.

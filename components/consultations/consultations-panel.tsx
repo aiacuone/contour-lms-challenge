@@ -166,7 +166,7 @@ export function ConsultationsPanel() {
               {actionError}
             </p>
           )}
-          <Table>
+          <Table label="My consultations">
             <TableHeader>
               <TableRow>
                 <TableHead>Date and time</TableHead>
@@ -183,7 +183,7 @@ export function ConsultationsPanel() {
                       {formatDateTime(row.scheduledAt)}
                     </time>
                   </TableCell>
-                  <TableCell className="whitespace-normal">
+                  <TableCell className="min-w-48 whitespace-normal">
                     {row.reason}
                   </TableCell>
                   <TableCell>
@@ -257,7 +257,7 @@ function RowActions({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex gap-2">
       <Button variant="outline" size="sm" onClick={onReschedule}>
         Reschedule
       </Button>

@@ -96,7 +96,7 @@ export function AdminConsultationsTable() {
       )}
 
       {load.state === "ready" && load.consultations.length > 0 && (
-        <Table>
+        <Table label="All consultations">
           <TableHeader>
             <TableRow>
               <TableHead>Student</TableHead>
@@ -121,7 +121,7 @@ export function AdminConsultationsTable() {
                     {formatDateTime(row.scheduledAt)}
                   </time>
                 </TableCell>
-                <TableCell className="whitespace-normal">
+                <TableCell className="min-w-48 whitespace-normal">
                   {row.reason}
                 </TableCell>
                 <TableCell>
