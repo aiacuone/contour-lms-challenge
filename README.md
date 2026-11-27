@@ -22,4 +22,8 @@ Smaller choices that do not need a full decision record.
 | Date and time | Stored as `timestamptz` in UTC, shown in the user's time zone | Avoids time zone bugs |
 | Work tracking | Issues in this repo | The process can be followed alongside the code |
 | Packaging | Built from a clean `git archive` | Secrets and local files cannot end up in the package |
+| Security headers | Content-Security-Policy, `nosniff`, `X-Frame-Options: DENY`, referrer and permissions policies, HSTS, set in `next.config.ts` | Cheap defence in depth. Scripts allow `'unsafe-inline'` because Next.js adds inline scripts; a per-request nonce would remove that but make every page dynamic |
+| Rate limiting | 60 API requests a minute per user (or IP when logged out), in memory, answering 429 | Slows a script hammering the API. The counts reset on restart and are not shared between servers; more than one instance would need a shared store such as Redis |
+| Secrets | `.env.example` with placeholders; `.env*` ignored; gitleaks scans the whole history in CI | Keys never reach the repo, and a mistake is caught on push |
+| CI | GitHub Actions on every push and pull request: lint and format, typecheck, secret scan, tests and end-to-end as separate jobs, with the local Supabase stack | Each failure names what broke. Superseded runs are cancelled, permissions are read-only, jobs have timeouts and actions are pinned to commit SHAs |
 | Quality baseline | ADRs, unit and integration tests, lint and format, typecheck, run instructions, README and seed data | Each is cheap and expected of a finished project |

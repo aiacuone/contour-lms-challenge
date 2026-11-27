@@ -1,6 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { apiRateLimit } from "@/lib/api/rate-limit";
+import type { ErrorBody } from "@/lib/api/errors";
+
 // Copied from the official with-supabase example. Changes: no env-var bypass,
 // logged-out visitors are sent to log in from every page except /auth/*, and
 // logged-in users are sent from the auth pages to the dashboard.
@@ -47,6 +50,13 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAuthPage = path.startsWith("/auth");
 
+  // Too many API calls from one user (or one IP when logged out) get a 429.
+  if (path.startsWith("/api")) {
+    const key = user?.sub ?? clientIp(request);
+    const limit = apiRateLimit(key);
+    if (!limit.ok) return tooManyRequests(limit.retryAfterSeconds);
+  }
+
   // API routes answer for themselves (401 as JSON), so they are not redirected.
   if (!user && !isAuthPage && !path.startsWith("/api")) {
     return redirectKeepingCookies(request, supabaseResponse, "/auth/login");
@@ -75,4 +85,22 @@ function redirectKeepingCookies(
     .getAll()
     .forEach((cookie) => redirect.cookies.set(cookie));
   return redirect;
+}
+
+// The first address in x-forwarded-for, as set by the hosting proxy.
+function clientIp(request: NextRequest): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  return forwarded?.split(",")[0]?.trim() || "unknown";
+}
+
+function tooManyRequests(retryAfterSeconds: number) {
+  return NextResponse.json<ErrorBody>(
+    {
+      error: {
+        code: "rate_limited",
+        message: "Too many requests. Try again in a minute.",
+      },
+    },
+    { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } },
+  );
 }
