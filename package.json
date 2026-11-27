@@ -12,6 +12,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "db:types": "supabase gen types typescript --local --schema public > lib/database.types.ts && prettier --write lib/database.types.ts",
     "setup": "node scripts/setup.mts",
+    "db:schema": "supabase db dump --local --schema public -f supabase/schema.sql && node scripts/schema-header.mts",
     "promote": "node --env-file-if-exists=.env.local scripts/promote.mts",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run build",
     "test": "vitest run",

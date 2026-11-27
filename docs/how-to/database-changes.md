@@ -25,10 +25,11 @@ Schema changes are SQL migration files in `supabase/migrations`, applied in name
    npx supabase db reset
    ```
 
-5. Regenerate the TypeScript types:
+5. Regenerate the TypeScript types and the readable schema file, `supabase/schema.sql`:
 
    ```
    npm run db:types
+   npm run db:schema
    ```
 
 6. Run the checks:
